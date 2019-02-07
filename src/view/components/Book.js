@@ -10,7 +10,9 @@ export default class Book extends Component {
           <BookCover
             cover={this.props.cover}
           />
-          <SelectButton />
+          <SelectButton 
+            shelf={this.props.shelf}
+          />
         </div>
         <div className="book-title">
           {this.props.title}

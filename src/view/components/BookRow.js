@@ -13,9 +13,10 @@ export default class BookRow extends Component {
             {this.props.books.map((book, index) => (
               <li key={index}>
                 <Book
-                  author={book.author}
+                  author={book.authors}
                   title={book.title}
                   cover={book.cover}
+                  shelf={book.shelf}
                 />
               </li>
             ))}
