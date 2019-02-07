@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Book from './Book';
 
 export default class BookRow extends Component {
+
+  //FIXME: Verificar um jeito melhor de fazer a validação se não é null
   render() {
     return (
       <div className="bookshelf">
@@ -13,9 +15,9 @@ export default class BookRow extends Component {
             {this.props.books.map((book, index) => (
               <li key={index}>
                 <Book
-                  author={book.authors}
+                  author={book.authors && book.authors.join(", ")}
                   title={book.title}
-                  cover={book.cover}
+                  cover={book.imageLinks.smallThumbnail}
                   shelf={book.shelf}
                 />
               </li>

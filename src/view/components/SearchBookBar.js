@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 export default class SearchBookBar extends Component {
+  
+  //FIXME: Verifica porque tem que ter esse handlechange aqui
+  handleChange = (event) => this.props.onChangeteste(event.target.value);
+
   render() {
     return (
       <div className="search-books-bar">
@@ -14,7 +18,12 @@ export default class SearchBookBar extends Component {
         </Link>
 
         <div className="search-books-input-wrapper">
-          <input type="text" placeholder="Search by title or author" />
+          <input
+            type="text"
+            placeholder="Search by title or author"
+            value={this.props.query}
+            onChange={this.handleChange}
+          />
         </div>
       </div>
     );
