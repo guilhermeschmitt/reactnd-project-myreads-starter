@@ -15,10 +15,8 @@ export default class BookRow extends Component {
             {this.props.books.map((book, index) => (
               <li key={index}>
                 <Book
-                  author={book.authors && book.authors.join(", ")}
-                  title={book.title}
-                  cover={book.imageLinks.smallThumbnail}
-                  shelf={book.shelf}
+                  book={book}
+                  updateList={this.props.updateList}
                 />
               </li>
             ))}

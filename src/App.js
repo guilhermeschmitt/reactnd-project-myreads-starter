@@ -1,10 +1,9 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-// import * as BooksAPI from './BooksAPI'
 import './style/App.css'
 import BookList from './view/BookList';
 import SearchBook from './view/SearchBook';
-import { getAll } from './BooksAPI';
+import { getAll, get } from './BooksAPI';
 
 class BooksApp extends React.Component {
 
@@ -19,18 +18,34 @@ class BooksApp extends React.Component {
     }
   }
 
-  componentDidMount() {
-    getAll().then(books => (
-      books.map(book => (
-        this.setState(prevState => ({
-          books: {
-            ...prevState.books,
-            [book.shelf]: [...prevState.books[book.shelf], book]
-          }
-        }))
-      ))
+  async componentDidMount() {
+    const books = await getAll();
+    books.map(book => (
+      this.setState(prevState => ({
+        books: {
+          ...prevState.books,
+          [book.shelf]: [...prevState.books[book.shelf], book]
+        }
+      }))
     ));
   }
+
+  updateList = (el) => {
+    for (let [key, value] of Object.entries(el)) {
+      value.map(id => get(id).then(response => response));
+      const results = value.map(async (id) => get(id));
+      Promise.all(results)
+        .then(books => this.updaStateRow(key, books));
+    }
+  }
+
+  updaStateRow = (row, arr) =>
+    this.setState(prevState => ({
+      books: {
+        ...prevState.books,
+        [row]: arr
+      }
+    }))
 
   render() {
     return (
@@ -39,6 +54,7 @@ class BooksApp extends React.Component {
           (
             <BookList
               books={this.state.books}
+              updateList={this.updateList}
             />
           )}
         />
