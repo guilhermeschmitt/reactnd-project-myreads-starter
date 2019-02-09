@@ -20,17 +20,18 @@ class BooksApp extends React.Component {
   }
 
   componentDidMount() {
-    getAll().then(response => {
-      response.map(book => {
-        this.state.books[book.shelf].push(book);
-        return this.setState(prevState => ({
-          books: { ...prevState.books }
+    getAll().then(books => (
+      books.map(book => (
+        this.setState(prevState => ({
+          books: {
+            ...prevState.books,
+            [book.shelf]: [...prevState.books[book.shelf], book]
+          }
         }))
-      })
-    });
+      ))
+    ));
   }
 
-  //TODO: MR-01 É pra componentizar as coisas, criar rotas também
   render() {
     return (
       <div className="app">
