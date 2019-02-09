@@ -1,10 +1,9 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-// import * as BooksAPI from './BooksAPI'
 import './style/App.css'
 import BookList from './view/BookList';
 import SearchBook from './view/SearchBook';
-import { getAll } from './BooksAPI';
+import { getAll, get } from './BooksAPI';
 
 class BooksApp extends React.Component {
 
@@ -19,18 +18,35 @@ class BooksApp extends React.Component {
     }
   }
 
-  componentDidMount() {
-    getAll().then(response => {
-      response.map(book => {
-        this.state.books[book.shelf].push(book);
-        return this.setState(prevState => ({
-          books: { ...prevState.books }
-        }))
-      })
-    });
+  async componentDidMount() {
+    const books = await getAll();
+    books.map(book => (
+      this.setState(prevState => ({
+        books: {
+          ...prevState.books,
+          [book.shelf]: [...prevState.books[book.shelf], book]
+        }
+      }))
+    ));
   }
 
-  //TODO: MR-01 É pra componentizar as coisas, criar rotas também
+  updateList = (el) => {
+    for (let [key, value] of Object.entries(el)) {
+      value.map(id => get(id).then(response => response));
+      const results = value.map(async (id) => get(id));
+      Promise.all(results)
+        .then(books => this.updaStateRow(key, books));
+    }
+  }
+
+  updaStateRow = (row, arr) =>
+    this.setState(prevState => ({
+      books: {
+        ...prevState.books,
+        [row]: arr
+      }
+    }))
+
   render() {
     return (
       <div className="app">
@@ -38,6 +54,7 @@ class BooksApp extends React.Component {
           (
             <BookList
               books={this.state.books}
+              updateList={this.updateList}
             />
           )}
         />

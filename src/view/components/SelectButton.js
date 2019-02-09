@@ -8,7 +8,7 @@ export default class SelectButton extends Component {
         <select
           //FIXME: É assim mesmo o melhor jeito de ser feito?
           value={shelf ? shelf : "none"}
-          onChange={() => { }}
+          onChange={this.props.move}
         >
           <option value="move" disabled>Move to...</option>
           <option value="currentlyReading">

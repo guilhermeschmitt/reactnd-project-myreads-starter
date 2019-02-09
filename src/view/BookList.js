@@ -15,14 +15,17 @@ export default class BookList extends Component {
             <BookRow
               title="Currently Reading"
               books={this.props.books.currentlyReading}
+              updateList={this.props.updateList}
             />
             <BookRow
               title="Want to Read"
               books={this.props.books.wantToRead}
+              updateList={this.props.updateList}
             />
             <BookRow
               title="Read"
               books={this.props.books.read}
+              updateList={this.props.updateList}
             />
           </div>
         </div>
