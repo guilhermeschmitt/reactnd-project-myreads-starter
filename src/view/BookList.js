@@ -12,21 +12,14 @@ export default class BookList extends Component {
         </div>
         <div className="list-books-content">
           <div>
-            <BookRow
-              title="Currently Reading"
-              books={this.props.books.currentlyReading}
-              updateList={this.props.updateList}
-            />
-            <BookRow
-              title="Want to Read"
-              books={this.props.books.wantToRead}
-              updateList={this.props.updateList}
-            />
-            <BookRow
-              title="Read"
-              books={this.props.books.read}
-              updateList={this.props.updateList}
-            />
+            {this.props.books.map((el, index) => (
+              <BookRow
+                title={el.title}
+                books={el.value}
+                updateList={this.props.updateList}
+                key={index}
+              />
+            ))}
           </div>
         </div>
         <AddButton
