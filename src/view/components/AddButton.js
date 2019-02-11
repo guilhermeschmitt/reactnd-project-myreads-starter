@@ -1,17 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
-//TODO: Acho que pode ser componente funcional
-export default class AddButton extends Component {
-  render() {
-    return (
-      <Link to={this.props.link}>
-        <div className={this.props.className}>
+const AddButton = ({ link, className, text }) => (
+      <Link to={link}>
+        <div className={className}>
           <button>
-            {this.props.text}
+            {text}
           </button>
         </div>
       </Link>
-    )
-  }
-}
+);
+
+AddButton.propTypes = {
+  link: PropTypes.string,
+  text: PropTypes.string.isRequired,
+  className: PropTypes.string
+};
+
+AddButton.defaultProps = {
+  link: '/',
+  className: 'open-search'
+};
+
+export default AddButton;

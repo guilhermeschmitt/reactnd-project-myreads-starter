@@ -1,21 +1,9 @@
 import React, { Component } from 'react'
-import SearchBookBar from './components/SearchBookBar'
+import SearchBar from './components/SearchBar'
 import { search } from '../BooksAPI';
-import BookRow from './components/BookRow';
+import BookShelf from './components/BookShelf';
 
 export default class SearchBook extends Component {
-
-  /*
-    NOTES: The search from BooksAPI is limited to a particular set of search terms.
-    You can find these search terms here:
-    https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-  
-    However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-    you don't find a specific author or title. Every search is limited by search terms.
-  */
-
-  //TODO: Talvez books grid seja um componente
-
   constructor(props) {
     super(props)
     this.state = {
@@ -27,30 +15,39 @@ export default class SearchBook extends Component {
   handleChange = async (query) => {
     this.setState({ query });
     const response = await search(query);
-    //FIXME: MElhor jeito mesmo?
-    if(!response.error) {
-      this.setState({ books: response })
-    } else {
-      this.setState({books: []})
-    }
+    this.changeBooks(response);
   }
 
+  changeBooks = found => {
+    let books = undefined;
+    if (found && !found.error) {
+      books = this.props.setSearchBooks(found);
+    } else {
+      books = this.props.setSearchBooks([]);
+    }
+    this.setState({ books })
+  }
+
+  updateList = async (arr) => {
+    await this.props.updateList(arr);
+    const books = this.props.setSearchBooks(this.state.books);
+    this.setState({ books })
+  }
 
   render() {
     return (
       <div className="search-books">
-        <SearchBookBar
+        <SearchBar
           link="/"
-          onChangeteste={this.handleChange}
+          onChangeQuery={this.handleChange}
           query={this.state.query}
         />
         <div className="search-books-results">
-          <ol className="books-grid">
-            <BookRow
-              title="TESTE"
-              books={this.state.books}
-            />
-          </ol>
+          <BookShelf
+            title="Result:"
+            books={this.state.books}
+            updateList={this.updateList}
+          />
         </div>
       </div>
     );

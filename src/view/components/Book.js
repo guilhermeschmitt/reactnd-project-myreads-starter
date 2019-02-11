@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import SelectButton from './SelectButton';
 import BookCover from './BookCover';
 import { update } from '../../BooksAPI';
+import Notification from './Notification';
 
 export default class Book extends Component {
 
   moveBook = async (event) => {
-    const response = await update(this.props.book, event.target.value);
-    this.props.updateList(response);
+    try {
+      const response = await update(this.props.book, event.target.value);
+      Notification.addMessage('success', 'Livro atualizado com sucesso!');
+      this.props.updateList(response);
+    } catch (error) {
+      Notification.addMessage('error', error.message);
+    }
   }
 
   render() {
@@ -32,4 +39,8 @@ export default class Book extends Component {
       </div>
     );
   }
+}
+
+Book.propTypes = {
+  book: PropTypes.object.isRequired
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-export default class SearchBookBar extends Component {
+export default class SearchBar extends Component {
   
-  //FIXME: Verifica porque tem que ter esse handlechange aqui
-  handleChange = (event) => this.props.onChangeteste(event.target.value);
+  handleChange = (event) => this.props.onChangeQuery(event.target.value);
 
   render() {
     return (
@@ -28,4 +28,15 @@ export default class SearchBookBar extends Component {
       </div>
     );
   }
+}
+
+SearchBar.propTypes = {
+  link: PropTypes.string,
+  query: PropTypes.string.isRequired,
+  handleChange: PropTypes.func
+}
+
+SearchBar.defaultProps = {
+  link: '/',
+  handleChange: () => alert('//TODO')
 }
