@@ -1,27 +1,38 @@
 import React, { Component } from 'react'
 import SearchBar from './components/SearchBar'
 import { search } from '../BooksAPI';
-import BookRow from './components/BookRow';
+import BookShelf from './components/BookShelf';
 
-//FIXME: Quando retornar para a página principal e depois voltar de novo para essa, encontrar a página limpa
 export default class SearchBook extends Component {
   constructor(props) {
     super(props)
     this.state = {
       query: '',
+      books: []
     }
   }
 
   handleChange = async (query) => {
     this.setState({ query });
     const response = await search(query);
-    if (response && !response.error) {
-      this.props.setSearchBooks(response);
-    } else {
-      this.props.setSearchBooks([]);
-    }
+    this.changeBooks(response);
   }
 
+  changeBooks = found => {
+    let books = undefined;
+    if (found && !found.error) {
+      books = this.props.setSearchBooks(found);
+    } else {
+      books = this.props.setSearchBooks([]);
+    }
+    this.setState({ books })
+  }
+
+  updateList = async (arr) => {
+    await this.props.updateList(arr);
+    const books = this.props.setSearchBooks(this.state.books);
+    this.setState({ books })
+  }
 
   render() {
     return (
@@ -32,10 +43,10 @@ export default class SearchBook extends Component {
           query={this.state.query}
         />
         <div className="search-books-results">
-          <BookRow
+          <BookShelf
             title="Result:"
-            books={this.props.books}
-            updateList={this.props.updateList}
+            books={this.state.books}
+            updateList={this.updateList}
           />
         </div>
       </div>
